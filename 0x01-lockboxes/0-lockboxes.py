@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+Lockboxes module
+"""
+
 
 def canUnlockAll(boxes):
     """ Check if there are boxes """
