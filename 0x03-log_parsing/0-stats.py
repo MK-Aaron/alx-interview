@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+LOG CHECK
+"""
 
 import re
 import sys
