@@ -5,6 +5,7 @@ used to find the minimum number of coins required to make up a given total
 amount given coin denominations list
 """
 
+
 def makeChange(coins: list, total: int) -> int:
     """
     Finds the optimal number of coins can sum up to a total
