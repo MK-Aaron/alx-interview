@@ -1,11 +1,18 @@
 #!/usr/bin/python3
+"""
+This module defines the coin change problem,  dynamic programming approach
+used to find the minimum number of coins required to make up a given total
+amount given coin denominations list
+"""
 
 def makeChange(coins: list, total: int) -> int:
     """
     Finds the optimal number of coins can sum up to a total
-    coins: is a list of coins that I can use to check the total
-    total: the sumbeing subtracted from
-    Return: an interger
+    Args:
+        coins: is a list of coins that I can use to check the total
+        total: the sumbeing subtracted from
+    Return:
+        Fewest number of coins needed
     """
 
     if total <= 0:
