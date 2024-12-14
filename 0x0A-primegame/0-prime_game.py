@@ -1,95 +1,28 @@
 #!/usr/bin/python3
-"""
-This module defines a set of functions that solve a challenge that involves
-determining a game winner based on the strategic removal of prime numbers
-and their multiples from a set of consecutive integers
+"""Prime game module.
 """
 
 
 def isWinner(x, nums):
+    """Determines the winner of a prime game session with `x` rounds.
     """
-    Function determines winner
-    Args:
-        x - number of rounds
-        nums - an array of n
-        n - last and included int in a set from 1
-    Returns:
-           Name of the player that won the most rounds
-           None, if winner cannot be determined
-    """
-    def sieve_of_eratosthenes(n):
-        """
-         Function generates prime numbers up to max number in nums
-        """
-        s = [True] * (n + 1)
-        s[0] = s[1] = False
-        primes = []
-        for i in range(2, n + 1):
-            if s[i]:
-                primes.append(i)
-                for m in range(i * i, n + 1, i):
-                    s[m] = False
-        return primes
-
-    def game_winner(n, primes):
-        """
-        Function determines the winner for a single round
-        Args:
-            n (int): the maximum number in the round
-            primes (list): a list of primes less than or equal to n
-        Returns:
-            str: "Maria" if Maria wins, "Ben" if Ben wins
-        """
-        if n < 2:
-            return None
-
-        is_prime = [False] * (n + 1)
-        for prime in primes:
-            if prime > n:
-                break
-            is_prime[prime] = True
-
-        moves = 0
-        while n > 1:
-            found_prime = False
-            for i in range(2, n + 1):
-                if is_prime[i]:
-                    moves += 1
-                    for j in range(i, n + 1, i):
-                        is_prime[j] = False
-                    found_prime = True
-                    break
-            if not found_prime:
-                break
-
-        # Maria wins if moves is odd, Ben wins if moves is even
-        return "Maria" if moves % 2 != 0 else "Ben"
-
-    if not x or x <= 0 or not nums:
+    if x < 1 or not nums:
         return None
-
-    # Find the maximum n in nums to optimize prime calculation
-    max_n = max(nums)
-    if max_n < 2:
+    marias_wins, bens_wins = 0, 0
+    # generate primes with a limit of the maximum number in nums
+    n = max(nums)
+    primes = [True for _ in range(1, n + 1, 1)]
+    primes[0] = False
+    for i, is_prime in enumerate(primes, 1):
+        if i == 1 or not is_prime:
+            continue
+        for j in range(i + i, n + 1, i):
+            primes[j - 1] = False
+    # filter the number of primes less than n in nums for each round
+    for _, n in zip(range(x), nums):
+        primes_count = len(list(filter(lambda x: x, primes[0: n])))
+        bens_wins += primes_count % 2 == 0
+        marias_wins += primes_count % 2 == 1
+    if marias_wins == bens_wins:
         return None
-
-    primes = sieve_of_eratosthenes(max_n)
-
-    # Count wins for each player
-    maria_wins = 0
-    ben_wins = 0
-
-    for n in nums:
-        winner = game_winner(n, primes)
-        if winner == "Maria":
-            maria_wins += 1
-        else:
-            ben_wins += 1
-
-    # Determine the overall winner
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
-        return None
+    return 'Maria' if marias_wins > bens_wins else 'Ben'
